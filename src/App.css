@@ -1,38 +1,76 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: rgba(0, 0, 0, 0.835);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app {
+  width: calc(100% - 100px);
+  height: 100%;
+  padding: 0 50px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.field {
+  width: 700px;
+  min-width: 700px;
+  height: 100%;
+  margin: 100px 0 50px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cell {
+  width: 13px;
+  height: 13px;
+  margin-right: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0.5px 0.5px black, -0.5px -0.5px black;
+  background-color: rgba(255, 255, 255, 0.897);
+}
+
+.water {
+  background-color: aqua;
+}
+
+.food {
+  width: 65%;
+  height: 65%;
+  border-radius: 50%;
+  background-color: orange;
+}
+
+.poison {
+  width: 65%;
+  height: 65%;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.being {
+  background-color: green;
+}
+
+.organic {
+  background-color: gray;
+}
+
+.designations {
+  width: 650px;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(240, 248, 255, 0.11);
+}
+
+.designations-item {
+  display: flex;
+  align-items: center;
 }

@@ -1,24 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import DesignationsComponent from './components/DesignationsComponent';
+import FieldComponent from './components/FieldComponent';
+import InputsComponent from './components/InputsComponent';
+import { Field } from './models/Field';
 
 function App() {
+  const [field, setField] = useState(new Field());
+  const [fastMode, setFastMode] = useState(false);
+
+  useEffect(() => {
+    restart();
+    setFastMode(true);
+  }, [])
+
+  useEffect(() => {
+    const interval = field.startSimulation(fastMode);
+    return () => { clearInterval(interval) }
+  }, [fastMode])
+
+  // field.bots.length не обновляется, новый стейт и коллбек в BotList?
+  useEffect(() => {
+    console.log(field.bots.length);
+
+  }, [field.bots.length])
+
+  function restart() {
+    const newField = new Field();
+    newField.initCells();
+    newField.spawnBots(55);
+    setField(newField);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <InputsComponent fastMode={fastMode} setFastMode={setFastMode} />
+      <FieldComponent cells={field.cells} />
+      <DesignationsComponent />
     </div>
   );
 }

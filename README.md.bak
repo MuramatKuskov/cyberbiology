@@ -3,7 +3,6 @@ The project represents a field populated by bots. Bots can interact with environ
 Each bot has its own genetic, which determines bot's behavior and possibilities.
 During their lifetime, bots are reproducing and mutate which accounts for biodiversity.
 
-### The project is not completed and is under development
 
 ###### Inspired by [foo52ru ТехноШаман (YouTube)](https://www.youtube.com/c/foo52ru)
 GitHub Profile related to project above - https://github.com/CyberBiology
