@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cyberbiology/static/css/main.71643db3.css",
+    "main.js": "/cyberbiology/static/js/main.71996d77.js",
+    "index.html": "/cyberbiology/index.html",
+    "main.71643db3.css.map": "/cyberbiology/static/css/main.71643db3.css.map",
+    "main.71996d77.js.map": "/cyberbiology/static/js/main.71996d77.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.71643db3.css",
+    "static/js/main.71996d77.js"
+  ]
+}
