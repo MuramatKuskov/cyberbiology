@@ -36,7 +36,7 @@ function App() {
     <div className='app'>
       <InputsComponent fastMode={fastMode} setFastMode={setFastMode} />
       <FieldComponent cells={field.cells} />
-      <DesignationsComponent />
+      <DesignationsComponent field={field} />
     </div>
   );
 }

@@ -6,12 +6,14 @@ import { Environment } from "./Environment";
 export class Field {
 	cells: Cell[][] = [];
 	bots: BotList = new BotList();
+	generation: number;
 	width: number;
 	height: number;
 
 	constructor(cells: Cell[][] = [], bots: BotList = new BotList()) {
 		this.cells = cells;
 		this.bots = bots;
+		this.generation = 0;
 		this.width = 0;
 		this.height = 0;
 	}
@@ -66,6 +68,7 @@ export class Field {
 					currentBot = currentBot?.next;
 				}
 				currentBot = this.bots.head;
+				//console.log(this.generation);
 			}, 10);
 		} else {
 			simInterval = setInterval(() => {
@@ -75,6 +78,7 @@ export class Field {
 					currentBot = currentBot?.next
 					:
 					currentBot = this.bots.head;
+				//console.log(this.generation);
 			}, 10);
 		}
 		return simInterval;

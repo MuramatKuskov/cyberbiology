@@ -27,10 +27,15 @@ const CellComponent: FC<CellProps> = ({ cell, key }) => {
 		<div className={[
 			'cell',
 			cell.type,
-			being?.isAlive && 'being',
+			//being?.isAlive && 'being',
 			cell.environment.remains && 'organic'
 		].join('	')}
-			key={key}>
+			key={key}
+			style={being?.isAlive ?
+				{ backgroundColor: `rgb(${being.color})` }
+				:
+				{}}
+		>
 			{cell.environment?.food && <div className='food'></div>}
 			{cell.environment?.poison && <div className='poison'></div>}
 		</div>

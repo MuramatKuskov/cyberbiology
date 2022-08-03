@@ -12,11 +12,13 @@ export class Being {
 	minerals: number;
 	age: number;
 	isAlive: boolean;
+	color: string;
 	c_green: number;
 	c_red: number;
 	c_blue: number;
 	c_family: number;
 	id: number;
+	ancestors: number;
 	prev: Being | null;
 	next: Being | null;
 
@@ -41,8 +43,10 @@ export class Being {
 		this.c_green = 255;		// herbivores
 		this.c_blue = 0;	//	poison catalysts
 		this.c_family = 0;	// family
+		this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`
 		// tech
 		this.id = Math.random();
+		this.ancestors = 0;
 		this.prev = null;
 		this.next = null;
 	}
@@ -54,6 +58,8 @@ export class Being {
 		}
 	}
 
+	// главная функция жизнедеятельности ботов
+	// управляет поведением
 	performActivity() {
 		let breakFlag;
 		let command;
@@ -243,6 +249,7 @@ export class Being {
 		return 5;
 	}
 
+	// выход: 2-яд не обнаружен / 3-недостаточно минералов / 4-успех
 	poison2Food() {
 		let direction = this.getParam() % 8;
 		let xt = this.xFromVector(direction);
@@ -294,6 +301,7 @@ export class Being {
 		return 6		// если пред. не сработали, значит там какой-то бот
 	}
 
+	// выход: 2-пусто / 3-там нет воды / 4-там яд / 5-там бот
 	swim() {
 		let dir = this.getParam() % 8;
 		let xt = this.xFromVector(dir);
@@ -378,14 +386,15 @@ export class Being {
 		if (n === 8) {
 			this.health = 0;
 			this.becomeOrganic();
+			return;
 		}
 
 		let yt = this.yFromVector(n);
 		let xt = this.xFromVector(n);
 
-		const newBot = new Being(this.field, yt, xt);
+		const newBot = new Being(this.field, xt, yt);
 
-		this.field.cells[newBot.y][newBot.x].being = newBot;
+		this.field.cells[yt][xt].being = newBot;
 
 		newBot.memory = JSON.parse(JSON.stringify(this.memory));
 		newBot.health = this.health / 2;
@@ -396,6 +405,10 @@ export class Being {
 		newBot.c_red = this.c_red;
 		newBot.c_blue = this.c_blue;
 		newBot.c_family = this.c_family;
+		newBot.ancestors += 1;
+		if (newBot.ancestors > this.field.generation) {
+			this.field.generation = newBot.ancestors
+		}
 
 		if (Math.random() < 0.25) {
 			const ma = Math.floor(Math.random() * this.memoSize);
@@ -436,7 +449,7 @@ export class Being {
 		for (let i = 0; i < 8; i++) {
 			let xt = this.xFromVector(i);
 			let yt = this.yFromVector(i);
-			if ((yt >= 0) && (yt < this.field.height)) {
+			if ((yt >= 0) && (yt < this.field.height - 1)) {
 				if (
 					!this.field.cells[yt][xt].being
 					&& !this.field.cells[yt][xt].environment.poison
