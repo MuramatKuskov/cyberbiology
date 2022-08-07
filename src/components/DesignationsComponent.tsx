@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { Field } from '../models/Field';
 
 interface DesignationsProps {
-	field: Field;
+	generation: number;
 }
 
-const DesignationsComponent: FC<DesignationsProps> = ({ field }) => {
+const DesignationsComponent: FC<DesignationsProps> = ({ generation }) => {
 	return (
 		<div>
-			{<div>Generation {field.generation}</div>}
+			{<div>Generation {generation}</div>}
 			<div className='designations'>
 				<ul className='designations-list'>
 					<li className='designations-item'>

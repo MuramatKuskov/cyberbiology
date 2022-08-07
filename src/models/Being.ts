@@ -22,7 +22,7 @@ export class Being {
 	prev: Being | null;
 	next: Being | null;
 
-	constructor(field: Field, x: number, y: number) {
+	constructor(field: Field, x: number, y: number, ancestors: number = 0) {
 		// coordinates
 		this.field = field;
 		this.x = x;
@@ -46,7 +46,7 @@ export class Being {
 		this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`
 		// tech
 		this.id = Math.random();
-		this.ancestors = 0;
+		this.ancestors = ancestors;
 		this.prev = null;
 		this.next = null;
 	}
@@ -200,13 +200,16 @@ export class Being {
 		if (this.field.cells?.[yt]?.[xt].environment.remains) {
 			this.field.cells[yt][xt].environment.remains = false;
 			this.minerals += 4;
-			this.getRed(100);
+			this.goRed(4);
+			this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`;
 			return 4;
 		}
 		// если там еда
 		if (this.field.cells?.[yt]?.[xt].environment.food) {
 			this.field.cells[yt][xt].environment.food = false;
 			this.health += 20;
+			this.goGreen(20);
+			this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`;
 			return 3;
 		}
 
@@ -224,7 +227,8 @@ export class Being {
 			this.field.bots.removeById(target.id);
 			let nrgy = 100 + (target.health / 2)
 			this.health += nrgy;
-			this.getRed(nrgy);
+			this.goRed(Math.floor(nrgy / 300));
+			this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`
 			this.field.cells[yt][xt].being = null;
 		}
 		// если у жертвы минералов больше
@@ -238,7 +242,8 @@ export class Being {
 			let nrgy = 100 + (target.health / 2) - 2 * target.minerals;
 			this.health += nrgy;
 			if (nrgy < 0) nrgy = 0;
-			this.getRed(nrgy);
+			this.goRed(Math.floor(nrgy / 300));
+			this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`
 			this.field.cells[yt][xt].being = null;
 			return 5;
 		}
@@ -262,7 +267,8 @@ export class Being {
 		this.minerals -= 4;
 		this.field.cells[yt][xt].environment.poison = false;
 		this.field.cells[yt][xt].environment.food = true;
-		this.getBlue(100);
+		this.goBlue(150);
+		this.color = `${this.c_red}, ${this.c_green}, ${this.c_blue}`;
 		return 4;
 	}
 
@@ -392,7 +398,7 @@ export class Being {
 		let yt = this.yFromVector(n);
 		let xt = this.xFromVector(n);
 
-		const newBot = new Being(this.field, xt, yt);
+		const newBot = new Being(this.field, xt, yt, this.ancestors + 1);
 
 		this.field.cells[yt][xt].being = newBot;
 
@@ -405,7 +411,6 @@ export class Being {
 		newBot.c_red = this.c_red;
 		newBot.c_blue = this.c_blue;
 		newBot.c_family = this.c_family;
-		newBot.ancestors += 1;
 		if (newBot.ancestors > this.field.generation) {
 			this.field.generation = newBot.ancestors
 		}
@@ -460,13 +465,13 @@ export class Being {
 		return 8;
 	}
 
+	// return r, g, b
 	getNewColor(parentColor: number) {
 		let r, g, b;
 		r = this.getRed(parentColor);
 		g = this.getGreen(parentColor);
 		b = this.getBlue(parentColor);
-		// 1 = world.generation
-		const delta = ((20000 / (1 + 1000)) + 20);
+		const delta = ((20000 / (this.field.generation + 1000)) + 20);
 
 		return this.getIntColor(this.vc(r + (Math.random() * delta - delta / 2)), this.vc(g + (Math.random() * delta - delta / 2)), this.vc(b + (Math.random() * delta - delta / 2)));
 	}
@@ -490,5 +495,35 @@ export class Being {
 
 	vc(c: number) {
 		return c & 0x000000FF;
+	}
+
+	goGreen(color: number) {
+		this.c_green = this.c_green + color;
+		if (this.c_green > 255) this.c_green = 255;
+		color = color / 2;
+		this.c_red = this.c_red - color;
+		if (this.c_red < 0) this.c_red = 0;
+		this.c_blue = this.c_blue - color;
+		if (this.c_blue < 0) this.c_blue = 0;
+	}
+
+	goBlue(color: number) {
+		this.c_blue = this.c_blue + color;
+		if (this.c_blue > 255) this.c_blue = 255;
+		color = color / 2;
+		this.c_red = this.c_red - color;
+		if (this.c_red < 0) this.c_red = 0;
+		this.c_green = this.c_green - color;
+		if (this.c_green < 0) this.c_green = 0;
+	}
+
+	goRed(color: number) {
+		this.c_red = this.c_red + color;
+		if (this.c_red > 255) this.c_red = 255;
+		color = color / 2;
+		this.c_green = this.c_green - color;
+		if (this.c_green < 0) this.c_green = 0;
+		this.c_blue = this.c_blue - color;
+		if (this.c_blue < 0) this.c_blue = 0;
 	}
 }

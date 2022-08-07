@@ -8,6 +8,8 @@ import { Field } from './models/Field';
 function App() {
   const [field, setField] = useState(new Field());
   const [fastMode, setFastMode] = useState(false);
+  const [generation, setGeneration] = useState(0);
+  const [numBots, setNumBots] = useState(field.bots.length);
 
   useEffect(() => {
     restart();
@@ -15,15 +17,33 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (numBots < 1) {
+      restart();
+      setFastMode(true);
+    }
+  }, [numBots])
+
+  useEffect(() => {
     const interval = field.startSimulation(fastMode);
     return () => { clearInterval(interval) }
-  }, [fastMode])
+  }, [fastMode, field])
 
-  // field.bots.length не обновляется, новый стейт и коллбек в BotList?
   useEffect(() => {
-    console.log(field.bots.length);
+    const generationObserver = setInterval(updGeneration, 500);
+    const botLengthObserver = setInterval(updNumBots, 300);
+    return () => {
+      clearInterval(generationObserver);
+      clearInterval(botLengthObserver);
+    }
+  }, [field])
 
-  }, [field.bots.length])
+  function updGeneration() {
+    setGeneration(field.generation);
+  }
+
+  function updNumBots() {
+    setNumBots(field.bots.length);
+  }
 
   function restart() {
     const newField = new Field();
@@ -34,9 +54,13 @@ function App() {
 
   return (
     <div className='app'>
-      <InputsComponent fastMode={fastMode} setFastMode={setFastMode} />
+      <InputsComponent
+        fastMode={fastMode}
+        setFastMode={setFastMode}
+        restart={restart}
+      />
       <FieldComponent cells={field.cells} />
-      <DesignationsComponent field={field} />
+      <DesignationsComponent generation={generation} />
     </div>
   );
 }

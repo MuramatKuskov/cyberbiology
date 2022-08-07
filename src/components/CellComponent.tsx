@@ -8,8 +8,7 @@ interface CellProps {
 }
 
 const CellComponent: FC<CellProps> = ({ cell, key }) => {
-	const [being, setBeing] = useState<Being | null>(cell.being);
-	const [isAlive, setIsAlive] = useState<boolean>(true);
+	const [being, setBeing] = useState<boolean>(cell.being ? true : false)/* <Being | null>(cell.being) */;
 
 	useEffect(() => {
 		const updInt = setInterval(upd, 10);
@@ -19,20 +18,27 @@ const CellComponent: FC<CellProps> = ({ cell, key }) => {
 	}, [])
 
 	function upd() {
-		being && setIsAlive(being?.isAlive);
-		setBeing(cell.being);
+		if (cell.being !== null) {
+			setBeing(true);
+		} else {
+			setBeing(false);
+		};
+
+		// setBeing(cell.being);
+		// console.log(being, cell.being);
+		// being && setIsAlive(being.isAlive);
 	}
 
 	return (
 		<div className={[
 			'cell',
 			cell.type,
-			//being?.isAlive && 'being',
+			//cell.being && 'being',
 			cell.environment.remains && 'organic'
 		].join('	')}
 			key={key}
-			style={being?.isAlive ?
-				{ backgroundColor: `rgb(${being.color})` }
+			style={cell.being ?
+				{ backgroundColor: `rgb(${cell.being?.color})` }
 				:
 				{}}
 		>
