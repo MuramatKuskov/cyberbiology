@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/cyberbiology/static/css/main.e65e8ccd.css",
-    "main.js": "/cyberbiology/static/js/main.bea913f7.js",
+    "main.js": "/cyberbiology/static/js/main.bcdffbc9.js",
     "index.html": "/cyberbiology/index.html",
     "main.e65e8ccd.css.map": "/cyberbiology/static/css/main.e65e8ccd.css.map",
-    "main.bea913f7.js.map": "/cyberbiology/static/js/main.bea913f7.js.map"
+    "main.bcdffbc9.js.map": "/cyberbiology/static/js/main.bcdffbc9.js.map"
   },
   "entrypoints": [
     "static/css/main.e65e8ccd.css",
-    "static/js/main.bea913f7.js"
+    "static/js/main.bcdffbc9.js"
   ]
 }
