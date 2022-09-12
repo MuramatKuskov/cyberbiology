@@ -3,11 +3,15 @@ import { Being } from "./Being";
 export class BotList {
 	head: Being | null;
 	tail: Being | null;
+	list: Being[];
+	longestSurvivors: Being[];
 	length: number;
 
 	constructor() {
 		this.head = null;
 		this.tail = null;
+		this.list = [];
+		this.longestSurvivors = [];
 		this.length = 0;
 	}
 
@@ -20,6 +24,7 @@ export class BotList {
 		}
 		this.head = newHead;
 		if (!this.tail) this.tail = newHead;
+		this.list.unshift(newHead);
 		this.length += 1;
 	}
 
@@ -32,6 +37,7 @@ export class BotList {
 		}
 		this.tail = newTail;
 		if (!this.head) this.head = newTail;
+		this.list.push(newTail);
 		this.length += 1;
 	}
 
@@ -42,6 +48,7 @@ export class BotList {
 		if (this.head) this.head.prev = null;
 		if (removed === this.tail) this.removeTail();
 		this.length -= 1;
+		this.list.shift();
 		return removed;
 	}
 
@@ -52,7 +59,17 @@ export class BotList {
 		if (this.tail) this.tail.next = null;
 		if (removed === this.head) this.removeHead();
 		this.length -= 1;
+		this.list.pop();
 		return removed;
+	}
+
+	findById(id: number) {
+		let result = this.head;
+		while (result !== null) {
+			if (result.id === id) return result;
+			result = result.next;
+		}
+		if (!result) return null;
 	}
 
 	removeById(id: number) {
@@ -77,6 +94,7 @@ export class BotList {
 			(prevBot !== null) && (prevBot.next = nextBot);
 			this.length -= 1;
 		}
+		this.list = this.list.filter(el => { return el.id !== id });
 		this.length < 0 && (this.length = 0);
 	}
 }

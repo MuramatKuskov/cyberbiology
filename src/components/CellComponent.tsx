@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Being } from '../models/Being';
+import { FC, useEffect, useState } from 'react';
 import { Cell } from '../models/Cell';
 
 interface CellProps {
@@ -23,10 +22,6 @@ const CellComponent: FC<CellProps> = ({ cell, key }) => {
 		} else {
 			setBeing(false);
 		};
-
-		// setBeing(cell.being);
-		// console.log(being, cell.being);
-		// being && setIsAlive(being.isAlive);
 	}
 
 	return (
